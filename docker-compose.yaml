@@ -1,0 +1,139 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"       # RabbitMQ AMQP
+      - "15672:15672"     # RabbitMQ Web UI
+    networks:
+      - backend-network
+
+  user-service:
+    build:
+      context: ./user-service/docker/php
+    container_name: user-service-app
+    restart: unless-stopped
+    volumes:
+      - ./user-service:/var/www/html
+    ports:
+      - "8081:8000"
+    depends_on:
+      - user-service-db
+      - rabbitmq
+    networks:
+      - backend-network
+
+  user-service-db:
+    image: mysql:8.0
+    container_name: user-service-mysql
+    environment:
+      MYSQL_DATABASE: userservice
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "33061:3306"
+    volumes:
+      - user-db-data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  delivery-service:
+    build:
+      context: ./delivery-service/docker/php
+    container_name: delivery-service-app
+    restart: unless-stopped
+    volumes:
+      - ./delivery-service:/var/www/html
+    ports:
+      - "8082:8000"
+    depends_on:
+      - delivery-service-db
+      - rabbitmq
+    networks:
+      - backend-network
+
+  delivery-service-db:
+    image: mysql:8.0
+    container_name: delivery-service-mysql
+    environment:
+      MYSQL_DATABASE: deliveryservice
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "33062:3306"
+    volumes:
+      - delivery-db-data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  tracking-service:
+    build:
+      context: ./tracking-service/docker/php
+    container_name: tracking-service-app
+    restart: unless-stopped
+    volumes:
+      - ./tracking-service:/var/www/html
+    ports:
+      - "8083:8000"
+    depends_on:
+      - tracking-service-db
+      - rabbitmq
+    networks:
+      - backend-network
+
+  tracking-service-db:
+    image: mysql:8.0
+    container_name: tracking-service-mysql
+    environment:
+      MYSQL_DATABASE: trackingservice
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "33063:3306"
+    volumes:
+      - tracking-db-data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  notification-service:
+    build:
+      context: ./notification-service/docker/php
+    container_name: notification-service-app
+    restart: unless-stopped
+    volumes:
+      - ./notification-service:/var/www/html
+    ports:
+      - "8084:8000"
+    depends_on:
+      - notification-service-db
+      - rabbitmq
+    networks:
+      - backend-network
+
+  notification-service-db:
+    image: mysql:8.0
+    container_name: notification-service-mysql
+    environment:
+      MYSQL_DATABASE: notificationservice
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "33064:3306"
+    volumes:
+      - notification-db-data:/var/lib/mysql
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  user-db-data:
+  delivery-db-data:
+  tracking-db-data:
+  notification-db-data:
