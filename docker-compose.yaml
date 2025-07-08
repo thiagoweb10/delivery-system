@@ -12,6 +12,7 @@ services:
     build:
       context: ./user-service/docker/php
     container_name: user-service-app
+    user: root
     restart: unless-stopped
     volumes:
       - ./user-service:/var/www/html
