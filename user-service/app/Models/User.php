@@ -60,4 +60,28 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function getRolesFormattedAttribute()
+    {
+        return $this->roles->map(fn ($role) => [
+            'name' => $role->name,
+            'label' => $role->label,
+        ]);
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        if ($this->relationLoaded('roles')) {
+            $array['roles'] = collect($this->roles)->map(function ($role) {
+                return [
+                    'name' => is_array($role) ? $role['name'] : $role->name,
+                    'label' => is_array($role) ? $role['label'] : $role->label,
+                ];
+            })->values();
+        }
+
+        return $array;
+    }
 }
