@@ -20,16 +20,22 @@ class AuthApiController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         try {
+
+            $dto = LoginUserDTO::fromArray(
+                $request->only(['email', 'password'])
+            );
+
+            return $this->successResponse(
+                $this->authService->login($dto),
+                'Login realizado com sucesso!'
+            );
             
-            $dto = LoginUserDTO::fromArray($request->only(['email', 'password']));
-
-            return $this->successResponse($this->authService->login($dto), 'Login realizado com sucesso!');
-
         } catch (InvalidCredentialsException $e) {
             return $this->errorResponse($e->getMessage());
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage());
         }
+
     }
 
     public function me(Request $request): JsonResponse
