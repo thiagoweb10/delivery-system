@@ -1,18 +1,13 @@
 <?php
 
-use App\Http\Controllers\Api\AuthApiController;
+use App\Jobs\ProcessUserTest;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\User\RegisterApiController;
 
 Route::post('/login', [AuthApiController::class, 'login']);
+Route::post('/registrar', RegisterApiController::class);
 
-Route::middleware(['auth:api', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', fn () => response()->json(['msg' => 'Área do Admin']));
-});
-
-Route::middleware(['auth:api', 'role:courier'])->group(function () {
-    Route::get('/courier/pedidos', fn () => response()->json(['msg' => 'Pedidos para Entregador']));
-});
-
-Route::middleware(['auth:api', 'role:customer'])->group(function () {
-    Route::get('/customer/meus-pedidos', fn () => response()->json(['msg' => 'Pedidos do Cliente']));
+Route::get('/teste', function(){
+    ProcessUserTest::dispatch();
 });
