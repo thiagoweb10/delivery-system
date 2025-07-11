@@ -90,4 +90,26 @@ class User extends Authenticatable implements JWTSubject
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
+    public static function paginateWithFilters($filters = [])
+    {
+        return User::when(isset($filters['name']), function ($query) use ($filters) {
+                    $query->where('name', 'like', "%{$filters['name']}%");
+                })
+                ->when(isset($filters['document']), function ($query) use ($filters) {
+                    $query->where('document', $filters['document']);
+                })
+                ->when(isset($filters['phone']), function ($query) use ($filters) {
+                    $query->where('phone', $filters['phone']);
+                })
+                ->when(isset($filters['email']), function ($query) use ($filters) {
+                    $query->where('email', $filters['email']);
+                })
+                ->when(isset($filters['role']), function ($query) use ($filters) {
+                    $query->whereHas('roles', function ($q) use ($filters) {
+                        $q->where('name', $filters['role']);
+                    });
+                })
+            ->paginate($filters['per_page'] ?? 10);
+    }
 }
