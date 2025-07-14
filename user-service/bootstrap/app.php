@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.admin' => \App\Http\Middleware\CheckAdminRole::class,
         ]);
     })
+    ->withCommands([
+        // ... outros comandos
+        \App\Console\Commands\TestPasswordReset::class,
+    ])
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (PermissionDeniedException $e, $request) {
             return response()->json([

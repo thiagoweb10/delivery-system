@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -86,11 +87,7 @@ class User extends Authenticatable implements JWTSubject
         return $array;
     }
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-
+    
     public static function paginateWithFilters($filters = [])
     {
         return User::when(isset($filters['name']), function ($query) use ($filters) {
@@ -111,5 +108,10 @@ class User extends Authenticatable implements JWTSubject
                     });
                 })
             ->paginate($filters['per_page'] ?? 10);
+    }
+
+    public function scopeEmail(Builder $query, $email): Builder
+    {
+        return $query->where('email','=', $email);
     }
 }

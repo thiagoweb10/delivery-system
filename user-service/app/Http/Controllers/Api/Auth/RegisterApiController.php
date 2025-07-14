@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Traits\ApiResponseTrait;
 use App\Actions\User\RegisterAction;
