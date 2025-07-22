@@ -37,7 +37,7 @@ class StoreRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'cpf' => preg_replace('/\D/', '', $this->cpf),
+            'document' => preg_replace('/\D/', '', $this->document),
             'phone' => preg_replace('/\D/', '', $this->phone),
             'status' => 'Ativo'
         ]);

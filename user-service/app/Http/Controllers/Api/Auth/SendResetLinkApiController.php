@@ -24,7 +24,7 @@ class SendResetLinkApiController extends Controller
             $action($dto);
 
             return $this->successResponse(
-                []
+                $action($dto)
                 ,'Token de redefinição de senha enviado com sucesso.'
             );
 

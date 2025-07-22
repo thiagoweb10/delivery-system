@@ -12,13 +12,15 @@ class SendResetLinkAction
         protected SendResetLinkService $service
     ) {}
 
-    public function __invoke(SendResetLinkDTO $dto): void
+    public function __invoke(SendResetLinkDTO $dto): array
     {
         $data = $this->service->sendResetLink($dto->email);
 
         SendToRabbitMQ::dispatch(
             $data
-            ,'user.reset_password-email'
-        );
+            ,'user.sendlinkreset-password'
+        )->onQueue('user.sendlinkreset-password');
+
+        return $data;
     }
 }

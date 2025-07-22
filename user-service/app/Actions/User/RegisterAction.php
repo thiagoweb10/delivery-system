@@ -20,7 +20,7 @@ class RegisterAction {
         SendToRabbitMQ::dispatch(
             $dto->toArray()
             ,'user.welcome-email'
-        );
+        )->onQueue('user.welcome-email');
 
         return $user;
     }
