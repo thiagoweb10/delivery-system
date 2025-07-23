@@ -4,6 +4,7 @@ namespace App\Actions\Auth;
 
 use App\Jobs\SendToRabbitMQ;
 use App\DTOs\Auth\SendResetLinkDTO;
+use App\Services\RabbitMQPublisher;
 use App\Services\SendResetLinkService;
 
 class SendResetLinkAction
@@ -16,10 +17,9 @@ class SendResetLinkAction
     {
         $data = $this->service->sendResetLink($dto->email);
 
-        SendToRabbitMQ::dispatch(
-            $data
-            ,'user.sendlinkreset-password'
-        )->onQueue('user.sendlinkreset-password');
+        $publisher = app(RabbitMQPublisher::class);
+
+        $publisher->publish('user.sendlinkreset-password', $data);
 
         return $data;
     }
