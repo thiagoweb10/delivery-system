@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendLinkTokenReset extends Mailable
+class SendUserWelcome extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -26,7 +26,7 @@ class SendLinkTokenReset extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Recuperação de senha.',
+            subject: 'Bem vindo ao nosso app!',
         );
     }
 
@@ -36,11 +36,11 @@ class SendLinkTokenReset extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.reset-link',
+            view: 'emails.welcome',
             with: [
-                'name' => $this->data['name'],
-                'token' => $this->data['token'],
-                'email' => $this->data['email'],
+                'name' => $this->data['user_name'],
+                'email' => $this->data['user_email'],
+                'role' => $this->data['user_type'],
             ],
         );
     }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\SendUserWelcome;
 use Illuminate\Console\Command;
 use App\Mail\SendLinkTokenReset;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -46,26 +47,11 @@ class RabbitMQConsumer extends Command
             $this->info("Mensagem recebida na fila '{$routingKey}':");
             dump($routingKey);
 
-            if ($routingKey === 'user.sendlinkreset-password') {
-                
-                $this->info("Enviando e-mail para {$data['email']}...");
-                Mail::to($data['email'])->send(new SendLinkTokenReset($data));
-                $this->info("E-mail enviado!");
-            }
-
             match ($routingKey) {
                 'user.sendlinkreset-password' => Mail::to($data['email'])->send(new SendLinkTokenReset($data)),
-                // Você pode adicionar mais casos para outras filas no futuro
+                'user.welcome' => Mail::to($data['user_email'])->send(new SendUserWelcome($data)),
                 default => $this->warn("Fila '{$routingKey}' não tratada."),
             };
-            
-
-
-
-
-
-
-            // Aqui você pode chamar serviços para enviar e-mail, notificações, etc.
         };
 
         // Escuta ambas as filas

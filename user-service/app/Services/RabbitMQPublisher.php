@@ -24,7 +24,6 @@ class RabbitMQPublisher
 
     public function publish(string $routingKey, array $data): void
     {
-        \Log::info("Tentando conectar no RabbitMQ {$this->host}:{$this->port}");
         $connection = new AMQPStreamConnection(
             $this->host,
             $this->port,
@@ -33,8 +32,6 @@ class RabbitMQPublisher
         );
 
         $channel = $connection->channel();
-
-        // Garante que a exchange exista
         $channel->exchange_declare(
             $this->exchange,
             'direct',
@@ -47,7 +44,7 @@ class RabbitMQPublisher
             json_encode($data),
             [
                 'content_type' => 'application/json',
-                'delivery_mode' => 2, // Persistente
+                'delivery_mode' => 2,
             ]
         );
 
