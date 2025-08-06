@@ -108,6 +108,7 @@ services:
       context: ./notification-service/docker/php
     container_name: notification-service-app
     restart: unless-stopped
+    user: "${UID}:${GID}" 
     volumes:
       - ./notification-service:/var/www/html
     ports:
