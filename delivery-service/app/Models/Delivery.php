@@ -14,13 +14,14 @@ class Delivery extends Model
 
     protected $fillable = [
         'tracking_code',
-        'status',
+        'delivery_status_id',
+        'order_id',
         'type',
         'customer_name',
         'customer_email',
         'customer_phone',
         'pickup_address',
-        'dropoff_address',
+        'delivery_address',
         'expected_date',
         'delivered_at',
     ];
@@ -32,4 +33,9 @@ class Delivery extends Model
         'expected_date' => 'datetime',
         'delivered_at' => 'datetime',
     ];
+
+    public function status()
+    {
+        return $this->belongsTo(DeliveryStatus::class);
+    }
 }
