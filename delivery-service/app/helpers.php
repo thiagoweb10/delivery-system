@@ -8,3 +8,10 @@ if (!function_exists('authUserId')) {
         return App::has('userId') ? App::make('userId') : null;
     }
 }
+
+if (!function_exists('authUserRole')) {
+    function authUserRole()
+    {
+        return App::has('userRole') ? App::make('userRole') : null;
+    }
+}

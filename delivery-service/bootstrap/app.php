@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'auth.jwt' => App\Http\Middleware\AuthenticateService::class,
+            'auth.client' => App\Http\Middleware\CheckClient::class,
+            'auth.courier' => App\Http\Middleware\CheckCourier::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

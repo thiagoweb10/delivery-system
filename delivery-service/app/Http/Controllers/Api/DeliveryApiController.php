@@ -17,6 +17,7 @@ class DeliveryApiController extends Controller
         return response()->json([
             'message' => 'Deliveries',
             'user_id' => $userId,
+            'role' => authUserRole(),
         ]);
     }
 
