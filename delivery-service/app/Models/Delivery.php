@@ -16,7 +16,10 @@ class Delivery extends Model
         'tracking_code',
         'delivery_status_id',
         'order_id',
+        'courier_id',
         'type',
+        'pickup_time',
+        'delivery_time',
         'customer_name',
         'customer_email',
         'customer_phone',
@@ -37,5 +40,20 @@ class Delivery extends Model
     public function status()
     {
         return $this->belongsTo(DeliveryStatus::class);
+    }
+
+    public function scopeCourierIsNull($query)
+    {
+        return $query->whereNull('courier_id');
+    }
+
+    public function scopeDeliveredAtIsNull($query)
+    {
+        return $query->whereNull('delivered_at');
+    }
+
+    public function scopeCourierBy($query)
+    {
+        return $query->where('courier_id', authUserId());
     }
 }

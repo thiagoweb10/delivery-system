@@ -15,9 +15,9 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        // Seed padrão (opcional)
         DB::table('delivery_statuses')->insert([
             ['name' => 'Pendente', 'slug' => 'pending', 'color' => '#ffc107', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Pedido Coletado', 'slug' => 'order_collected', 'color' => '#ffc107', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Em Rota', 'slug' => 'in_transit', 'color' => '#17a2b8', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Entregue', 'slug' => 'delivered', 'color' => '#28a745', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Cancelado', 'slug' => 'canceled', 'color' => '#dc3545', 'created_at' => now(), 'updated_at' => now()],
