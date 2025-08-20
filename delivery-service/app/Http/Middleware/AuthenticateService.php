@@ -14,10 +14,12 @@ class AuthenticateService
             $payload = JWTAuth::parseToken()->getPayload();
             $userId = $payload['sub'] ?? null;
 
+            $role = $payload['role'] ?? null;
+
             $request->attributes->add(['jwt_payload' => $payload->toArray()]);
 
-            // Salva userId para o helper funcionar
             App::instance('userId', $userId);
+            App::instance('userRole', $role);
         } catch (JWTException $e) {
             return response()->json(['error' => 'Token inválido ou ausente'], 401);
         }
