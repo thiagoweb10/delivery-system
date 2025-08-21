@@ -17,12 +17,10 @@ class Delivery extends Model
         'delivery_status_id',
         'order_id',
         'courier_id',
+        'customer_id',
         'type',
         'pickup_time',
         'delivery_time',
-        'customer_name',
-        'customer_email',
-        'customer_phone',
         'pickup_address',
         'delivery_address',
         'expected_date',
@@ -55,5 +53,10 @@ class Delivery extends Model
     public function scopeCourierBy($query)
     {
         return $query->where('courier_id', authUserId());
+    }
+
+    public function scopeCustomerBy($query)
+    {
+        return $query->where('customer_id', authUserId());
     }
 }
