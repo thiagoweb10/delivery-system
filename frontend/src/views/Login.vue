@@ -1,6 +1,5 @@
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <!-- Lado esquerdo: imagem grande (mantido igual) -->
     <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-[#0a66c2] to-blue-500 items-center justify-center rounded-l-2xl">
       <img :src="mascote" alt="Mascote" class="object-contain"/>
     </div>
@@ -8,14 +7,12 @@
     <!-- Lado direito: formulário com logo flutuante -->
     <div class="flex flex-1 items-center justify-center p-8">
       <div class="relative w-full max-w-md flex flex-col items-center">
-        <!-- Logo flutuante -->
         <div class="absolute -top-20 bg-white rounded-full p-2 shadow-xl border border-gray-200 transition-transform duration-300 hover:scale-105">
           <img :src="logo" alt="Logo" class="w-36 h-36 object-contain"/>
         </div>
 
         <!-- Caixa branca -->
         <div class="w-full bg-white p-10 rounded-2xl shadow-lg space-y-6 pt-28">
-          <!-- Texto de boas-vindas mais profissional -->
           <h2 class="text-3xl font-bold text-center text-gray-800">Acesse sua conta</h2>
           <p class="text-center text-gray-500 mt-0">Insira suas credenciais para continuar</p>
 
@@ -73,26 +70,29 @@ import { useAlert } from '@/utils/alert.js'
 const auth = useAuthStore()
 const router = useRouter()
 const { error } = useAlert()
-const loading = ref(false);
+const loading = ref(false)
 const credentials = reactive({
 	email:'',
 	password:''
-});
+})
 
 const handleLogin = async () => {
-    loading.value = true;
+  
+  loading.value = true;
+
 	try {
-        const { data } = await userApi.post("/login", {
-            email: credentials.email,
-            password: credentials.password,
-        })
+      const { data } = await userApi.post("/login", {
+        email: credentials.email,
+        password: credentials.password,
+      })
 
-        auth.setToken(data.data.access_token)
-        setGlobalToken(data.data.access_tokenen)
+      auth.setToken(data.data.access_token)
+      auth.setUser(data.data.user)
+      setGlobalToken(data.data.access_tokenen)
 
-        console.log("Usuário logado!", auth.token)
+      // console.log("Usuário logado!", data.data.user)
 
-        router.push('/dashboard');
+      router.push('/dashboard');
 
     } catch (errorr) {
         console.log(errorr)

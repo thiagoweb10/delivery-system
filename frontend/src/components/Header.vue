@@ -3,7 +3,7 @@
     <div class="hidden md:flex items-center gap-4">
       <img :src="logo" alt="Logo" class="h-full max-w-[150px] mt-4 object-contain"/>
       <span class="font-bold text-[#0068c0] text-sm animate-fadeIn">
-        Olá, Entregador {{ auth.user?.name || 'Usuário' }}! Vamos às entregas?
+      {{ auth.welcomeMessage }}
       </span>
     </div>
 
@@ -13,7 +13,7 @@
 
     <div class="hidden md:flex items-center gap-4 relative">
       <!-- Botão sino com submenu -->
-      <div class="relative" ref="notificationsRef">
+      <div class="relative mt-2" ref="notificationsRef">
         <button @click="toggleNotifications" class="relative p-2 rounded-full hover:bg-gray-100 transition group">
           <font-awesome-icon :icon="['fas', 'bell']" class="text-[#0a66c2] text-xl"/>
           <span 
@@ -43,12 +43,8 @@
 
       <!-- Avatar com dropdown -->
       <div class="relative" ref="menuRef">
-        <img 
-          src="https://i.pravatar.cc/40" 
-          alt="Avatar" 
-          class="w-10 h-10 rounded-full border-2 border-[#0a66c2] cursor-pointer"
-          @click="toggleMenu"
-        />
+        
+        <img :src="auth.userAvatarUrl" alt="Avatar" class="w-18 h-12 rounded-full"  @click="toggleMenu" />
         <div 
           @mouseleave="menuOpen = false"
           v-if="menuOpen"

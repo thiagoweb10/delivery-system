@@ -24,3 +24,7 @@ app.use(router)
 
 app.mount('#app')
 
+import { useAuthStore } from '@/store/auth'
+const auth = useAuthStore()
+auth.loadFromStorage()
+
