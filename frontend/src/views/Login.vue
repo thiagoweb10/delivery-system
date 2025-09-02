@@ -88,7 +88,8 @@ const handleLogin = async () => {
 
       auth.setToken(data.data.access_token)
       auth.setUser(data.data.user)
-      setGlobalToken(data.data.access_tokenen)
+      setGlobalToken(data.data.access_token)
+      //deliveryApi.setToken(data.token) 
 
       // console.log("Usuário logado!", data.data.user)
 

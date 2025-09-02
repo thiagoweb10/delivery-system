@@ -1,10 +1,14 @@
 <template>
   <MainLayout>
     <template #dashboard-cards>
-      <DashboardCard title="Pendentes"  count="4" :icon="['fas', 'clock']" color="yellow"/>
-      <DashboardCard title="Em Rota"    count="2" :icon="['fas', 'route']" color="blue"/>
-      <DashboardCard title="Concluídas" count="8" :icon="['fas', 'check']" color="green"/>
-      <DashboardCard title="Canceladas" count="1" :icon="['fas', 'thumbs-down']" color="red"/>
+      <DashboardCard
+        v-for="(card, index) in cards"
+        :key="index"
+        :title="card.status"
+        :count="card.total"
+        :color="card.color"
+        :icon="statusIcons[card.status] || ['fas', 'circle']"
+      />
     </template>
 
     <template #delivery-cards>
@@ -25,9 +29,36 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import { deliveryApi } from '@/api/Api'
+import { useAlert } from '@/utils/alert.js'
+
 import MainLayout from '@/layouts/MainLayout.vue'
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue'
 import DeliveryCard from '@/components/Delivery/DeliveryCard.vue'
 import HistoryCard from '@/components/History/HistoryCard.vue'
 import Pagination from '@/components/Pagination.vue'
+
+const { error } = useAlert()
+const cards = ref([])
+
+const statusIcons = {
+  'Pendente': ['fas', 'clock'],
+  'Em Rota': ['fas', 'route'],
+  'Entregue': ['fas', 'thumbs-up'],
+  'Cancelado': ['fas', 'thumbs-down']
+}
+
+const fetchDashboardData = async () => {
+  try {
+    const { data } = await deliveryApi.get('/deliveries/dashboard')
+    cards.value = data.data
+  } catch (msgError) {
+    error(msgError)
+  }
+}
+
+onMounted(() => {
+  fetchDashboardData()
+})
 </script>

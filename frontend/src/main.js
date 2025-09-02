@@ -10,10 +10,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // importar ícones que você quer usar
-import { faTruck, faBox, faClock, faBell, faCog, faRoute, faCheck, faThumbsDown, faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faTruck, faBox, faClock, faBell, faCog, faRoute, faCheck, faThumbsDown, faHouse, faCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 // adicionar ícones na "library"
-library.add(faTruck, faBox, faClock, faBell, faCog, faRoute, faCheck, faThumbsDown, faHouse )
+library.add(faTruck, faBox, faClock, faBell, faCog, faRoute, faCheck, faThumbsDown, faHouse, faCircle, faThumbsUp )
 
 const app = createApp(App)
 

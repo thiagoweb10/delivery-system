@@ -22,7 +22,8 @@ export function createApi(baseURL = "") {
 
   api.interceptors.request.use(
     (config) => {
-      if (authToken) config.headers.Authorization = `Bearer ${authToken}`
+      const token = localStorage.getItem("token")
+      if (token) config.headers.Authorization = `Bearer ${token}`
       return config
     },
     (error) => Promise.reject(error)
