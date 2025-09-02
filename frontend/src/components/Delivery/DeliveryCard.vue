@@ -4,7 +4,7 @@
   >
     <div class="flex-1">
       <p class="font-semibold text-gray-800">{{ title }}</p>
-      <p class="text-sm text-gray-500">Cliente: {{ client }} | Distância: {{ distance }}</p>
+      <p class="text-sm text-gray-500">Cliente: {{ client }} | Tipo: {{ type }}</p>
     </div>
     <button
       class="bg-[#0a66c2] font-bold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition w-full sm:w-auto mt-2 mx-auto sm:mx-0"
@@ -22,6 +22,6 @@
 defineProps({
   title: String,
   client: String,
-  distance: String
+  type: String
 })
 </script>

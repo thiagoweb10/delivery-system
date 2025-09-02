@@ -12,8 +12,13 @@
     </template>
 
     <template #delivery-cards>
-      <DeliveryCard title="#12345 - Rua das Flores" client="João Silva" distance="2,5 km"/>
-      <DeliveryCard title="#12346 - Av. Paulista" client="Maria Souza" distance="5 km"/>
+      <DeliveryCard 
+        v-for="delivery in deliveries.slice(0, 4)" 
+        :key="delivery.id"
+        :title="`#${delivery.tracking_code} - ${delivery.delivery_address}`" 
+        :client="delivery.customer_name || 'Cliente não informado'" 
+        :type="delivery.type || 'N/A'"
+      />
     </template>
 
     <template #delivery-pagination>
@@ -21,9 +26,15 @@
     </template>
 
     <template #history-cards>
-      <HistoryCard title="#12340 - Rua das Acácias" status="Concluída" />
-      <HistoryCard title="#12339 - Rua das Laranjeiras" status="Cancelada" />
-      <HistoryCard title="#12339 - Rua das Laranjeiras" status="Pendente" />
+      
+      <HistoryCard
+        v-for="history in histories.slice(0, 4)" 
+        :key="history.id"
+        :title="`#${history.tracking_code} - ${history.delivery_address}`" 
+        :status="history.status.name"
+        :color="history.status.color"
+      />
+
     </template>
   </MainLayout>
 </template>
@@ -41,6 +52,8 @@ import Pagination from '@/components/Pagination.vue'
 
 const { error } = useAlert()
 const cards = ref([])
+const deliveries = ref([])
+const histories = ref([])
 
 const statusIcons = {
   'Pendente': ['fas', 'clock'],
@@ -49,7 +62,7 @@ const statusIcons = {
   'Cancelado': ['fas', 'thumbs-down']
 }
 
-const fetchDashboardData = async () => {
+const getDashboardData = async () => {
   try {
     const { data } = await deliveryApi.get('/deliveries/dashboard')
     cards.value = data.data
@@ -58,7 +71,27 @@ const fetchDashboardData = async () => {
   }
 }
 
+const getAvailableDeliveries = async () => {
+  try {
+    const { data } = await deliveryApi.get('/deliveries/available')
+    deliveries.value = data.data.data
+  } catch (msgError) {
+    error(msgError)
+  }
+}
+
+const getDeliveryHistory = async () => {
+  try {
+    const { data } = await deliveryApi.get('/deliveries/history')
+    histories.value = data.data.data
+  } catch (error) {
+    error(msgError)
+  }
+}
+
 onMounted(() => {
-  fetchDashboardData()
+  getDashboardData()
+  getAvailableDeliveries()
+  getDeliveryHistory()
 })
 </script>

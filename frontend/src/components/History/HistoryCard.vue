@@ -5,11 +5,11 @@
     <!-- Ícone e título -->
     <div class="flex items-center gap-2">
       <font-awesome-icon :icon="icon" class="text-xl" style="color: #0068c0;" />
-      <p class="font-semibold text-gray-800">{{ title }}</p>
+      <p class="font-semibold text-gray-800 text-sm">{{ title }}</p>
     </div>
 
     <!-- Status sempre à direita -->
-    <span class="font-medium text-gray-700 text-right">{{ status }}</span>
+    <span class="font-medium text-right" :style="{ color: color }">{{ status }}</span>
   </div>
 </template>
 
@@ -23,7 +23,8 @@ library.add(faCheckCircle, faTimesCircle, faClock, faRoute)
 
 defineProps({
   title: String,
-  status: String
+  status: String,
+  color: String
 })
 
 // Ícone dinâmico conforme status
