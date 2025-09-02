@@ -35,6 +35,20 @@ class CourierApiController extends Controller
         }
     }
 
+    public function getCountByStatus()
+    {
+        // dd($this->courierService->getCountByStatus());
+        try {
+            $data = $this->courierService->getCountByStatus();
+
+            return $this->successResponse(
+                $data->toArray(), 'Listagem gerada com sucesso!'
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
     /**
      *  Accepted delivery for courier.
      */

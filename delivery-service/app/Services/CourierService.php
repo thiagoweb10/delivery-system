@@ -14,6 +14,20 @@ class CourierService
         return Delivery::CourierIsNull()->DeliveredAtIsNull()->paginate(10);
     }
 
+    public function getCountByStatus()
+    {
+        return Delivery::query()
+            ->CourierBy()
+            ->join('delivery_statuses', 'deliveries.delivery_status_id', '=', 'delivery_statuses.id')
+            ->select(
+                'delivery_statuses.name as status',
+                'delivery_statuses.color as color',
+                \DB::raw('count(*) as total')
+            )
+            ->groupBy('delivery_statuses.name', 'delivery_statuses.color')
+            ->get();
+    }
+
     public function acceptDelivery(Delivery $delivery, AcceptDeliveryDTO $dto): void
     {
         if ($delivery->courier_id !== null) {
