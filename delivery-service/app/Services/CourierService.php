@@ -74,6 +74,8 @@ class CourierService
 
     public function getHistory(): LengthAwarePaginator
     {
-        return Delivery::CourierBy()->paginate(10);
+        return Delivery::queryByRole((int) authUserRole())
+            ->with('status')
+            ->paginate(10);
     }
 }

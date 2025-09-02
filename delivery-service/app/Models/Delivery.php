@@ -35,9 +35,21 @@ class Delivery extends Model
         'delivered_at' => 'datetime',
     ];
 
+    /**
+     * Historico de entrega por tipo de perfil.
+     */
+    public static function queryByRole(int $role)
+    {
+        return match ($role) {
+            2 => self::CourierBy(),
+            3 => self::CustomerBy(),
+            default => self::query(),
+        };
+    }
+
     public function status()
     {
-        return $this->belongsTo(DeliveryStatus::class);
+        return $this->belongsTo(DeliveryStatus::class, 'delivery_status_id');
     }
 
     public function scopeCourierIsNull($query)

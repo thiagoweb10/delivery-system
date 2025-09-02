@@ -92,8 +92,6 @@ class CourierApiController extends Controller
 
     public function getDeliveryHistory()
     {
-        // $userRoleId = authUserRole();
-
         try {
             $data = $this->courierService->getHistory();
 
