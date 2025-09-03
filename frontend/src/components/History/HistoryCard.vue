@@ -4,14 +4,20 @@
   >
     <!-- Ícone e título -->
     <div class="flex items-center gap-2">
-      <font-awesome-icon :icon="icon" class="text-xl" style="color: #0068c0;" />
-      <p class="font-semibold text-gray-800 text-sm">{{ title }}</p>
+      <p class="text-gray-800 text-sm">{{ title }}</p>
     </div>
 
     <!-- Status sempre à direita -->
-    <span class="font-medium text-right" :style="{ color: color }">{{ status }}</span>
+    <span
+      class="font-bold text-[10px] text-center px-2 py-1 rounded-full whitespace-nowrap"
+      :style="{ backgroundColor: color, color: '#fff' }"
+    >
+      {{ status }}
+    </span>
   </div>
 </template>
+
+
 
 <script setup>
 import { computed } from 'vue'
