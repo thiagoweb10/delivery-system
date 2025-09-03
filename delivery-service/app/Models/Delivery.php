@@ -38,11 +38,11 @@ class Delivery extends Model
     /**
      * Historico de entrega por tipo de perfil.
      */
-    public static function queryByRole(int $role)
+    public static function queryByRole()
     {
-        return match ($role) {
-            2 => self::CourierBy(),
-            3 => self::CustomerBy(),
+        return match (authUserRole()) {
+            'courier' => self::CourierBy(),
+            'customer' => self::CustomerBy(),
             default => self::query(),
         };
     }
