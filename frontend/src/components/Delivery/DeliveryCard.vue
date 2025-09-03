@@ -67,9 +67,7 @@ const handleDeliveryAddClick = async (delivery_id) => {
   } 
 }
 
-// Visualizar detalhes da entrega
 const handleViewDetails = (delivery_id) => {
   console.log('Visualizar detalhes da entrega:', delivery_id)
-  // aqui você pode abrir modal ou redirecionar
 }
 </script>

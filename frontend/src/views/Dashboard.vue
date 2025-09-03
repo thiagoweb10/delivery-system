@@ -1,7 +1,7 @@
 <template>
   <MainLayout>
-    <!-- Dashboard -->
-    <template #dashboard-cards>
+    <!-- Dashboard Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
       <DashboardCard
         v-for="(card, index) in cards"
         :key="index"
@@ -10,51 +10,62 @@
         :color="card.color"
         :icon="statusIcons[card.status] || ['fas', 'circle']"
       />
-      <div 
-        v-if="cards.length === 0" 
-        class="w-full bg-white rounded-xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition"
+      <div
+        v-if="cards.length === 0"
+        class="w-full bg-white rounded-xl p-4 flex items-center justify-center shadow-sm transition"
       >
         Nenhuma entrega disponível
       </div>
-    </template>
+    </div>
 
-    <!-- Delivery -->
-    <template #delivery-cards>
-      <TransitionGroup
-        name="fade"
-        tag="div"
-        class="space-y-2 relative"
-      >
-        <DeliveryCard
-          @loadDataCards="getLoadingDataCards"
-          v-for="delivery in deliveries.slice(0, 3)"
-          :key="delivery.id"
-          :title="`#${delivery.tracking_code} - ${delivery.delivery_address}`"
-          :client="delivery.customer_name || 'Cliente não informado'"
-          :type="delivery.type || 'N/A'"
-          :deliveryId="delivery.id"
-          class="w-full"
-        />
-      </TransitionGroup>
-    </template>
+    <!-- Delivery e History lado a lado -->
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- Delivery -->
+      <DeliveryList class="flex-1">
+        <template #cards>
+          <TransitionGroup
+            name="fade"
+            tag="div"
+            class="space-y-2 relative"
+          >
+            <DeliveryCard
+              v-for="delivery in deliveries.slice(0, 3)"
+              :key="delivery.id"
+              :title="`#${delivery.tracking_code} - ${delivery.delivery_address}`"
+              :client="delivery.customer_name || 'Cliente não informado'"
+              :type="delivery.type || 'N/A'"
+              :deliveryId="delivery.id"
+              @loadDataCards="getLoadingDataCards"
+            />
+          </TransitionGroup>
+        </template>
+      </DeliveryList>
 
-    <!-- History -->
-    <template #history-cards>
-      <TransitionGroup
-        name="fade"
-        tag="div"
-        class="space-y-2 relative"
-      >
-        <HistoryCard
-          v-for="history in histories.slice(0, 4)" 
-          :key="history.id"
-          :title="`#${history.tracking_code} - ${history.delivery_address}`" 
-          :status="history.status.name"
-          :color="history.status.color"
-          class="w-full"
-        />
-      </TransitionGroup>
-    </template>
+      <!-- History -->
+      <HistoryList class="flex-1">
+        <template #cards>
+          <TransitionGroup
+            name="fade"
+            tag="div"
+            class="space-y-2 relative"
+          >
+            <HistoryCard
+              v-for="history in histories.slice(0, 4)"
+              :key="history.id"
+              :title="`#${history.tracking_code} - ${history.delivery_address}`"
+              :status="history.status.name"
+              :color="history.status.color"
+              class="w-full"
+            />
+          </TransitionGroup>
+        </template>
+      </HistoryList>
+    </div>
+
+    <!-- Banner -->
+    <div class="mt-6">
+      <Banner />
+    </div>
   </MainLayout>
 </template>
 
@@ -65,8 +76,11 @@ import { useAlert } from '@/utils/alert.js'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue'
+import DeliveryList from '@/components/Delivery/DeliveryList.vue'
 import DeliveryCard from '@/components/Delivery/DeliveryCard.vue'
+import HistoryList from '@/components/History/HistoryList.vue'
 import HistoryCard from '@/components/History/HistoryCard.vue'
+import Banner from '@/components/Banner.vue'
 
 const { error } = useAlert()
 const cards = ref([])
@@ -127,7 +141,7 @@ onMounted(() => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 1.5s ease; /* mais lento */
+  transition: all 1.5s ease;
 }
 
 .fade-enter-from {
@@ -154,9 +168,9 @@ onMounted(() => {
   transition: transform 1.2s ease;
 }
 
-/* 🔑 Evita "crescimento" na troca */
+/* Evita crescimento do item ao sair */
 .fade-leave-active {
    position: absolute;
-  width: 100%;
+   width: 100%;
 }
 </style>

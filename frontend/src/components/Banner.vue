@@ -1,7 +1,7 @@
 <template>
-     <div
+  <div
     class="w-full rounded-lg shadow-md p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4
-           mb-4 sm:mb-0 bg-cover bg-center text-white h-64"
+           mb-4 sm:mb-0 bg-cover bg-center text-white"
     :style="{ backgroundImage: `url(${bannerImage})` }"
   >
     <!-- Texto do Banner -->
@@ -26,8 +26,7 @@ import bannerImage from '@/assets/img/banner.png'
 </script>
 
 <style scoped>
-/* Se quiser, pode adicionar altura mínima para deixar o banner mais chamativo */
-div {
+:deep(.banner-container) {
   min-height: 200px;
 }
 </style>
