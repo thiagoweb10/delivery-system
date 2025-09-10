@@ -4,10 +4,10 @@ import Preview from "@/views/Preview.vue";
 import Login from "@/views/Login.vue";
 
 const routes = [
-  { path: "/", name: "dashboard", component: Dashboard },
-  { path: "/dashboard", name: "dashboard", component: Dashboard },
-  { path: "/detalhes", name: "Preview", component: Preview },
-  { path: "/login", name: "login", component: Login },
+  { path: "/login",       name: "login",              component: Login },
+  { path: "/",            name: "delivery-dashboard", component: Dashboard },
+  { path: "/dashboard",   name: "delivery-dashboard", component: Dashboard },
+  { path: "/detalhes/:id?",name: "delivery-details", component: Preview, props: true },
 
 ];
 

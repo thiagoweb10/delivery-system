@@ -41,6 +41,7 @@ defineProps({
 })
 
 import { ref } from 'vue'
+import { useRouter } from 'vue-router' 
 import { deliveryApi } from '@/api/Api'
 import { useAlert } from '@/utils/alert.js'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -52,6 +53,8 @@ library.add(faInfoCircle)
 const emit = defineEmits(['loadDataCards'])
 const { error, success } = useAlert()
 const loading = ref(false)
+
+const router = useRouter()
 
 // Aceitar entrega
 const handleDeliveryAddClick = async (delivery_id) => {
@@ -68,6 +71,7 @@ const handleDeliveryAddClick = async (delivery_id) => {
 }
 
 const handleViewDetails = (delivery_id) => {
-  console.log('Visualizar detalhes da entrega:', delivery_id)
+
+  router.push({ name: 'delivery-details', params: { id: btoa(delivery_id) } })
 }
 </script>
