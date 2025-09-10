@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AcceptDeliveryDTO;
+use App\DTOs\UpdateStatusDeliveryDTO;
 use App\Exceptions\UnauthorizedActionException;
 use App\Models\Delivery;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -12,6 +13,33 @@ class CourierService
     public function listAvailableDeliveries(): LengthAwarePaginator
     {
         return Delivery::CourierIsNull()->DeliveredAtIsNull()->paginate(10);
+    }
+
+    public function getCountByStatus()
+    {
+        return Delivery::query()
+            ->CourierBy()
+            ->join('delivery_statuses', 'deliveries.delivery_status_id', '=', 'delivery_statuses.id')
+            ->select(
+                'delivery_statuses.name as status',
+                'delivery_statuses.color as color',
+                \DB::raw('count(*) as total')
+            )
+            ->groupBy('delivery_statuses.name', 'delivery_statuses.color')
+            ->get();
+    }
+
+    public function updateStatusDelivery(Delivery $delivery, UpdateStatusDeliveryDTO $dto): void
+    {
+        if (is_null($delivery->courier_id) && $delivery->courier_id != authUserId()) {
+            throw new UnauthorizedActionException('Você só pode alterar o status de entregas que estão atribuídas a você.');
+        }
+
+        $delivery->update([
+            'pickup_time' => now()->toDateTimeString(),
+            'delivery_status_id' => $dto->status_id,
+            'notes' => $dto->notes,
+        ]);
     }
 
     public function acceptDelivery(Delivery $delivery, AcceptDeliveryDTO $dto): void
@@ -60,6 +88,9 @@ class CourierService
 
     public function getHistory(): LengthAwarePaginator
     {
-        return Delivery::CourierBy()->paginate(10);
+        return Delivery::queryByRole(authUserRole())
+            ->with('status')
+            ->orderby('updated_at', 'desc')
+            ->paginate(10);
     }
 }

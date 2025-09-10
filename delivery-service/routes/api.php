@@ -10,8 +10,10 @@ Route::middleware(['auth.jwt', 'auth.client'])->group(function () {
 
 Route::middleware(['auth.jwt', 'auth.courier'])->group(function () {
     Route::prefix('deliveries')->controller(CourierApiController::class)->group(function () {
+        Route::get('dashboard', 'getCountByStatus');
         Route::get('available', 'availableDeliveries');
         Route::get('history', 'getDeliveryHistory');
+        Route::post('{delivery}/status', 'updateStatusDelivery');
         Route::post('{delivery}/accept', 'acceptDelivery');
         Route::post('{delivery}/release', 'releaseDelivery');
         Route::post('{delivery}/complete', 'completeDelivery');

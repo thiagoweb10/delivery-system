@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DTOs\UpdateStatusDeliveryDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Courier\AcceptDeliveryRequest;
+use App\Http\Requests\Courier\UpdateStatusDeliveryRequest;
 use App\Models\Delivery;
 use App\Services\CourierService;
 use App\Traits\ApiResponseTrait;
@@ -32,6 +34,22 @@ class CourierApiController extends Controller
             );
         } catch (\Exception $e) {
             return $this->errorResponse('Um erro inesperado: '.$e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Count data by status.
+     */
+    public function getCountByStatus()
+    {
+        try {
+            $data = $this->courierService->getCountByStatus();
+
+            return $this->successResponse(
+                $data->toArray(), 'Listagem gerada com sucesso!'
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
@@ -65,6 +83,9 @@ class CourierApiController extends Controller
         }
     }
 
+    /**
+     *  complete delivery for courier.
+     */
     public function completeDelivery(Delivery $delivery)
     {
         try {
@@ -76,14 +97,30 @@ class CourierApiController extends Controller
         }
     }
 
+    /**
+     *  get data history for courier.
+     */
     public function getDeliveryHistory()
     {
-        // $userRoleId = authUserRole();
-
         try {
             $data = $this->courierService->getHistory();
 
             return $this->successResponse($data, 'Historico gerado com sucesso!', 201);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    /**
+     *  update status delivery for courier.
+     */
+    public function updateStatusDelivery(UpdateStatusDeliveryRequest $request, Delivery $delivery)
+    {
+        try {
+            $dto = UpdateStatusDeliveryDTO::fromArray($request->validated());
+            $this->courierService->updateStatusDelivery($delivery, $dto);
+
+            return $this->successResponse([], 'Entrega atualizada com sucesso!', 201);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
