@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AcceptDeliveryDTO;
+use App\DTOs\UpdateStatusDeliveryDTO;
 use App\Exceptions\UnauthorizedActionException;
 use App\Models\Delivery;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -26,6 +27,19 @@ class CourierService
             )
             ->groupBy('delivery_statuses.name', 'delivery_statuses.color')
             ->get();
+    }
+
+    public function updateStatusDelivery(Delivery $delivery, UpdateStatusDeliveryDTO $dto): void
+    {
+        if (is_null($delivery->courier_id) && $delivery->courier_id != authUserId()) {
+            throw new UnauthorizedActionException('Você só pode alterar o status de entregas que estão atribuídas a você.');
+        }
+
+        $delivery->update([
+            'pickup_time' => now()->toDateTimeString(),
+            'delivery_status_id' => $dto->status_id,
+            'notes' => $dto->notes,
+        ]);
     }
 
     public function acceptDelivery(Delivery $delivery, AcceptDeliveryDTO $dto): void
