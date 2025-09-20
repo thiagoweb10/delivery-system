@@ -2,11 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/views/Dashboard.vue";
 import Preview from "@/views/Preview.vue";
 import Login from "@/views/Login.vue";
-import ResetPasswordLink from "@/views/ResetPasswordLink.vue";
-import ResetPassword from "@/views/ResetPassword.vue";
 import ResetNewPassword from "@/views/ResetNewPassword.vue";
-
-
 
 const routes = [
 
