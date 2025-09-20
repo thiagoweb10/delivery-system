@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -11,18 +10,20 @@ use Illuminate\Queue\SerializesModels;
 
 class SendLinkTokenReset extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(
-        public array $data
-    ){}
+    public string $name;
+    public string $email;
+    public string $token;
 
-    /**
-     * Get the message envelope.
-     */
+    public function __construct(array $data)
+    {
+        $this->name = $data['name'];
+        $this->email = $data['email'];
+        $this->token = $data['token'];
+    }
+
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -30,26 +31,18 @@ class SendLinkTokenReset extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
             view: 'emails.reset-link',
             with: [
-                'name' => $this->data['name'],
-                'token' => $this->data['token'],
-                'email' => $this->data['email'],
+                'name' => $this->name,
+                'email' => $this->email,
+                'token' => $this->token,
             ],
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];

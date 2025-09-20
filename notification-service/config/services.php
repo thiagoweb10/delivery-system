@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -35,4 +34,7 @@ return [
         ],
     ],
 
+    'frontend' => [
+        'url' => env('VUE_FRONTEND_URL', 'http://localhost:5173'),
+    ],
 ];
