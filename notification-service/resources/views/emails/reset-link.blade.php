@@ -100,10 +100,10 @@
       <div class="email-body">
         <h1>Redefinição de Senha</h1>
         <p>Olá,</p>
-        <p>Recebemos uma solicitação para redefinir sua senha. Se foi você, clique no botão abaixo para criar uma nova senha com segurança.</p>
-        <p style="text-align: center;">
-          <a href="/reset-password?token={{ $data['token'] }}" class="btn">Redefinir Minha Senha</a>
-        </p>
+        <p>Recebemos uma solicitação para redefinir sua senha.</p>
+
+        <h2><strong> {{ $token }}</strong></h2>
+        
         <p>Se você não solicitou a redefinição, nenhuma ação é necessária.</p>
         <p>Atenciosamente,<br><strong>Equipe Delivery Service</strong></p>
       </div>

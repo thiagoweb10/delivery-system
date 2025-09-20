@@ -31,7 +31,9 @@
                      class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#0a66c2] focus:outline-none text-gray-900 bg-white placeholder-gray-400"/>
             </div>
             <div class="flex justify-end mb-4">
-                <a href="#" class="text-sm text-[#0a66c2] hover:underline">Esqueci minha senha?</a>
+              <router-link to="/nova-senha" class="text-sm text-[#0a66c2] hover:underline">
+                Esqueci minha senha?
+              </router-link>
             </div>
             <button
                 type="submit"
